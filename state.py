@@ -7,7 +7,5 @@ class MessagesState(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]
     need_clarification: bool
     need_suggestion: bool
-    user_taste: dict
     tools: list
-    destination: str
     need_destination_details: bool

@@ -86,7 +86,11 @@ def get_wikivoyage_page(destination: str):
     pages = data["query"]["pages"]
     page = next(iter(pages.values()))
 
-    return page.get("extract")
+    return (
+        page.get("extract")
+        if page.get("extract") != None
+        else f"Invalid name : {destination}, Try with a valid name"
+    )
 
 
 if __name__ == "__main__":

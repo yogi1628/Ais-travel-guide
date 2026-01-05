@@ -1,5 +1,4 @@
 from langchain_core.prompts import ChatPromptTemplate
-from constants import LLM3
 from datetime import datetime
 
 today = datetime.now().strftime("%A, %d %B %Y")
@@ -16,12 +15,13 @@ Task :
 - 
 You are a specialized travel content writer for Ais Travel Guide.
 
-Your task is to generate a beautiful, informative, and trustworthy travel guide for a single destination using ONLY the information provided to you.
+Your task is to generate a beautiful, informative, and trustworthy travel guide for a single destination for the.
 
-- You will receive destination, weather_info and raw content related to that destination from wikivoyage search.
-- You are equipped with weatherinfo and other tools. User weather_info tool to get weather conditions for the destination.
+- You will receive user's query about the particular destination.
+- You are equipped with weatherinfo, TavilySearch and wikivoyage search tools to get required information about the destination.
 
 ------------------------------------
+If user wants complete travel details, write in the following format:
 OUTPUT FORMAT :
 
 # Destination Name
@@ -61,6 +61,7 @@ Otherwise omit this section.
 WRITING STYLE :
 
 - Write in Markdown only
+- Write according to user's query only
 - write only content for user nothing else
 - Clear, friendly, and inspiring tone
 - Short paragraphs
@@ -69,23 +70,6 @@ WRITING STYLE :
 - Professional travel-guide quality
 """,
         ),
-        (
-            "user",
-            """
-Destination :
-{destination}
-
-------------------------------------------------------------------------
-current weather conditions :
-{weather_info}
-
--------------------------------------------------------------------------
-Raw Content about destination :
-{raw_content}        
-
-""",
-        ),
+        ("user", "{destination_query}"),
     ]
 ).partial(today=today)
-
-get_details_chain = destination_details_prompt | LLM3
