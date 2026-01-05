@@ -1,0 +1,13 @@
+from typing import TypedDict, Annotated
+from langchain_core.messages import AnyMessage
+from langgraph.graph.message import add_messages
+
+
+class MessagesState(TypedDict):
+    messages: Annotated[list[AnyMessage], add_messages]
+    need_clarification: bool
+    need_suggestion: bool
+    user_taste: dict
+    tools: list
+    destination: str
+    need_destination_details: bool

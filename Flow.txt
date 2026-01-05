@@ -1,0 +1,15 @@
+START
+ ↓
+PreferenceNode
+ ↓
+(if missing info) → AskUserNode → PreferenceNode
+ ↓
+DestinationSearchNode
+ ↓
+ConfirmDestinationNode
+ ↓
+(if yes) → BookingChoiceNode
+ ↓
+(if booking) → SeleniumBookingNode
+ ↓
+END

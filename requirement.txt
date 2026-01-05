@@ -1,0 +1,10 @@
+langchain-groq
+langchain-google-genai
+langchain-ollama
+langchain
+langgraph
+python-dotenv
+gradio
+langchain-tavily
+mcp
+langchain-mcp-adapters
