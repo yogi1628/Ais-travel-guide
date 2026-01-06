@@ -5,8 +5,6 @@ from Chains.suggestion import suggestion_prompt
 
 
 async def suggestion_node(state: MessagesState) -> MessagesState:
-    # user_taste = state["user_taste"]
-    # user_taste = state["messages"][LAST].content
     user_taste = state["user_preferences"]
     tools = await CLIENT.get_tools()
     suggestion_agent = create_agent(model=LLM2, tools=tools)

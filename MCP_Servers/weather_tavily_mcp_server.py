@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from langchain_tavily import TavilySearch
 import os
 import requests
+from amadeus_cl import hotel_search
 
 load_dotenv()
 
@@ -60,6 +61,20 @@ def weather_info(city: str) -> dict:
 
 @mcp.tool()
 def get_wikivoyage_page(destination: str):
+    """
+    Fetch a plain-text travel guide summary for a destination from Wikivoyage.
+
+    Args:
+        destination (str): Destination name (e.g., "Paris", "Kerala").
+
+    Returns:
+        str: Wikivoyage page extract if available, otherwise an invalid
+             destination message.
+
+    Raises:
+        requests.exceptions.HTTPError: If the HTTP request fails.
+        ValueError: If a non-JSON response is received.
+    """
     HEADERS = {"User-Agent": "AisTravelGuide/1.0 (contact: your_email@example.com)"}
     url = "https://en.wikivoyage.org/w/api.php"
 
@@ -71,25 +86,39 @@ def get_wikivoyage_page(destination: str):
         "explaintext": True,
         "redirects": 1,
     }
-
     response = requests.get(url, params=params, headers=HEADERS, timeout=10)
-
-    # 🔴 IMPORTANT: always check status
     response.raise_for_status()
-
-    # 🔴 Ensure we actually received JSON
     if not response.headers.get("Content-Type", "").startswith("application/json"):
         raise ValueError("Non-JSON response received")
-
     data = response.json()
-
     pages = data["query"]["pages"]
     page = next(iter(pages.values()))
-
     return (
         page.get("extract")
         if page.get("extract") != None
         else f"Invalid name : {destination}, Try with a valid name"
+    )
+
+
+@mcp.tool()
+def get_hotels_by_geo_code(lat: float, lon: float):
+    """
+    Fetch nearby hotels using geographic coordinates.
+
+    Args:
+        lat (float): Latitude of the location.
+        lon (float): Longitude of the location.
+
+    Returns:
+        list: Hotels found within the search radius.
+    """
+    hotels = hotel_search.search_hotels_by_geocode(
+        latitude=lat, longitude=lon, radius=10, ratings=["3", "4", "5"]
+    )
+    return (
+        "Hotels not found from this tool, Try Tavilly Search tool."
+        if hotels == []
+        else hotels
     )
 
 

@@ -123,6 +123,12 @@ wheels = [
 ]
 
 [[package]]
+name = "amadeus"
+version = "12.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/e0/d5f8395c2ab9ea6248c2b4f6aa1fc6857a62bd8a189510e744fd6c86c309/amadeus-12.0.0.tar.gz", hash = "sha256:80d4b844cdfc2ada937061949b04527b0c2fe229d276eeb554b78ef778b053a5", size = 36750, upload-time = "2025-03-11T13:48:30.696Z" }
+
+[[package]]
 name = "annotated-doc"
 version = "0.0.4"
 source = { registry = "https://pypi.org/simple" }
@@ -1592,6 +1598,7 @@ name = "projects"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "amadeus" },
     { name = "dotenv" },
     { name = "gradio" },
     { name = "langchain" },
@@ -1607,6 +1614,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "amadeus", specifier = ">=12.0.0" },
     { name = "dotenv", specifier = ">=0.9.9" },
     { name = "gradio", specifier = ">=6.2.0" },
     { name = "langchain", specifier = ">=1.2.0" },
