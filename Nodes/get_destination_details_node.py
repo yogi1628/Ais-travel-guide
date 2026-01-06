@@ -5,7 +5,7 @@ from langchain.agents import create_agent
 
 
 async def get_destination_details_node(state: MessagesState) -> MessagesState:
-    destination_query = state["messages"][LAST].content
+    destination_query = state["destination_query"]
     tools = await CLIENT.get_tools()
 
     destination_detail_agent = create_agent(model=LLM2, tools=tools)
@@ -17,4 +17,6 @@ async def get_destination_details_node(state: MessagesState) -> MessagesState:
         "need_suggestion": False,
         "need_clarification": state["need_clarification"],
         "need_destination_details": False,
+        "destination_query": state["destination_query"],
+        "user_preferences": state["user_preferences"],
     }

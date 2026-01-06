@@ -9,3 +9,5 @@ class MessagesState(TypedDict):
     need_suggestion: bool
     tools: list
     need_destination_details: bool
+    user_preferences: str
+    destination_query: str

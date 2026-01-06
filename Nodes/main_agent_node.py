@@ -15,4 +15,6 @@ def main_agent_node(state: MessagesState) -> MessagesState:
             "need_suggestion": res.need_suggestion,
             "need_clarification": res.need_clarification,
             "need_destination_details": res.need_destination_details,
+            "user_preferences": res.user_preferences,
+            "destination_query": res.destination_query,
         }
