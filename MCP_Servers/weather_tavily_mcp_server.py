@@ -2,6 +2,7 @@ import requests
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
 from langchain_tavily import TavilySearch
+import json
 import os
 import requests
 from amadeus_cl import hotel_search
@@ -101,25 +102,102 @@ def get_wikivoyage_page(destination: str):
 
 
 @mcp.tool()
-def get_hotels_by_geo_code(lat: float, lon: float):
+def get_hotels_by_geo_code(
+    lat: float, lon: float, ratings: list[str] = ["3", "4", "5"]
+) -> list:
     """
-    Fetch nearby hotels using geographic coordinates.
+    Search hotels near a geographic location using latitude and longitude.
+
+    Use this tool when the user provides coordinates instead of a city name.
 
     Args:
         lat (float): Latitude of the location.
         lon (float): Longitude of the location.
+        ratings (list[str], optional): Hotel star ratings to filter by.
 
     Returns:
-        list: Hotels found within the search radius.
+        list: List of hotels near the given coordinates,
+        or a fallback message if no hotels are found.
     """
     hotels = hotel_search.search_hotels_by_geocode(
-        latitude=lat, longitude=lon, radius=10, ratings=["3", "4", "5"]
+        latitude=lat, longitude=lon, radius=5, ratings=ratings
     )
     return (
-        "Hotels not found from this tool, Try Tavilly Search tool."
+        ["Hotels not found from this tool, Try Tavilly Search tool."]
         if hotels == []
         else hotels
     )
+
+
+@mcp.tool()
+def get_hotel_by_city_code(
+    city_code: str,
+    ratings: list[str] = ["3", "4", "5"],
+    amenities: list[str] = ["WIFI"],
+) -> list:
+    """
+    Search hotels within a city using IATA city code.
+
+    Use this tool when the user specifies a destination city.
+
+    Args:
+        city_code (str): City code identifier.
+        ratings (list[str], optional): Hotel star ratings to filter by.
+        amenities (list[str], optional): Required hotel amenities.
+
+    Returns:
+        list: List of hotels in the city,
+        or a fallback message if no hotels are found.
+    """
+    hotels = hotel_search.search_hotels_by_city(
+        city_code=city_code, radius=20, ratings=ratings, amenities=amenities
+    )
+    return (
+        ["Hotels not found from this tool, Try Tavilly Search tool."]
+        if hotels == []
+        else hotels
+    )
+
+
+# @mcp.tool()
+# def hotel_offers(
+#     hotel_ids: str,
+#     check_in_date: str,
+#     check_out_date: str,
+#     adults: int,
+#     room_quantity: int,
+#     currency: str,
+#     board_type: str = "BREAKFAST",
+# ) -> list:
+#     """
+#     Fetch available hotel offers for given hotels and stay details.
+
+#     Dates must be in YYYY-MM-DD format.
+
+#     Args:
+#         hotel_ids (str): list of Comma-separated hotel ID, e.g. : hotel_ids = ["RDSLV925","OBSLVCEC","QISLV055","OBSLVWFH"] .
+#         check_in_date (str): Check-in date (YYYY-MM-DD).
+#         check_out_date (str): Check-out date (YYYY-MM-DD).
+#         adults (int): Number of adults.
+#         room_quantity (int): Number of rooms.
+#         currency (str): Currency code (e.g., INR, USD).
+#         board_type (str, optional): Meal plan type.
+
+#     Returns:
+#         list: Available hotel offers matching the criteria.
+#     """
+#     offers = hotel_search.search_hotel_offers(
+#         hotel_ids=hotel_ids,
+#         check_in_date=check_in_date,
+#         check_out_date=check_out_date,
+#         adults=adults,
+#         room_quantity=room_quantity,
+#         currency=currency,
+#         board_type=board_type,
+#     )
+#     if not offers:
+#         return json.dumps({"success": False, "message": "No offers"})
+#     return json.dumps({"success": True, "offers": offers})
 
 
 if __name__ == "__main__":

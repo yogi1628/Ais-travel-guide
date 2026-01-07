@@ -11,3 +11,5 @@ class MessagesState(TypedDict):
     need_destination_details: bool
     user_preferences: str
     destination_query: str
+    need_hotel_flight_node: bool
+    hotels_flight_query: str

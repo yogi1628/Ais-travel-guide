@@ -1,6 +1,9 @@
 from amadeus import Client, ResponseError
 from typing import List, Dict, Optional
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
 
 AMADEUS_CLIENT_ID = os.getenv("AMADEUS_CLIENT_ID")
 AMADEUS_CLIENT_SECRET = os.getenv("AMADEUS_CLIENT_SECRET")
@@ -169,11 +172,11 @@ class AmadeusHotelSearch:
 
         Args:
             hotel_ids: List of Amadeus hotel IDs (max 3 per request)
-            check_in_date: Check-in date in YYYY-MM-DD format
+            check_in_date: Check-in date in YYYY-MM-DD format (must be future date)
             check_out_date: Check-out date in YYYY-MM-DD format
             adults: Number of adult guests per room (1-9)
             room_quantity: Number of rooms (1-9)
-            currency: Currency code (e.g., 'USD', 'EUR', 'GBP')
+            currency: Currency code (e.g., 'USD', 'EUR', 'GBP', 'INR')
             payment_policy: 'NONE', 'GUARANTEE', 'DEPOSIT'
             board_type: Meal plan - 'ROOM_ONLY', 'BREAKFAST', 'HALF_BOARD', 'FULL_BOARD'
 
@@ -181,8 +184,11 @@ class AmadeusHotelSearch:
             List of hotel offers with pricing and room details
         """
         try:
+            # Build parameters
             params = {
-                "hotelIds": ",".join(hotel_ids[:3]),  # Max 3 hotels per request
+                "hotelIds": (
+                    hotel_ids if isinstance(hotel_ids, str) else ",".join(hotel_ids[:3])
+                ),
                 "checkInDate": check_in_date,
                 "checkOutDate": check_out_date,
                 "adults": adults,
@@ -194,7 +200,15 @@ class AmadeusHotelSearch:
             if board_type:
                 params["boardType"] = board_type
 
+            print(f"Searching with params: {params}")
+
+            # Use the correct endpoint - shopping.hotel_offers_search (note the 's' in offers)
             response = self.amadeus.shopping.hotel_offers_search.get(**params)
+
+            # Check if response.data exists and is not None
+            if not hasattr(response, "data") or response.data is None:
+                print("No data in response")
+                return []
 
             offers = []
             for hotel_offer in response.data:
@@ -202,6 +216,9 @@ class AmadeusHotelSearch:
                     "hotelId": hotel_offer.get("hotel", {}).get("hotelId"),
                     "name": hotel_offer.get("hotel", {}).get("name"),
                     "rating": hotel_offer.get("hotel", {}).get("rating"),
+                    "cityCode": hotel_offer.get("hotel", {}).get("cityCode"),
+                    "latitude": hotel_offer.get("hotel", {}).get("latitude"),
+                    "longitude": hotel_offer.get("hotel", {}).get("longitude"),
                     "offers": [],
                 }
 
@@ -234,6 +251,7 @@ class AmadeusHotelSearch:
                             "paymentType": offer.get("policies", {}).get("paymentType"),
                             "guarantee": offer.get("policies", {}).get("guarantee"),
                         },
+                        "boardType": offer.get("boardType"),
                         "self_link": offer.get("self"),
                     }
                     hotel_info["offers"].append(offer_details)
@@ -244,6 +262,9 @@ class AmadeusHotelSearch:
 
         except ResponseError as error:
             print(f"Error searching hotel offers: {error}")
+            print(
+                f"Error details: {error.response.body if hasattr(error, 'response') else 'No details'}"
+            )
             return []
 
     def get_hotel_offer_details(self, offer_id: str) -> Optional[Dict]:
@@ -262,6 +283,9 @@ class AmadeusHotelSearch:
 
         except ResponseError as error:
             print(f"Error getting offer details: {error}")
+            print(
+                f"Error details: {error.response.body if hasattr(error, 'response') else 'No details'}"
+            )
             return None
 
     def search_hotel_by_name(

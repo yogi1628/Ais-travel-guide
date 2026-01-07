@@ -9,12 +9,14 @@ load_dotenv(override=True)
 LLM1 = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
 LLM2 = ChatGroq(model="openai/gpt-oss-120b", temperature=0)
 LLM3 = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)
+LLM4 = ChatGroq(model="meta-llama/llama-4-maverick-17b-128e-instruct", temperature=0)
+
 MAIN_AGENT = "main_agent"
 GET_DESTINATION_DETAILS = "get_destination_details"
 END = END
 SUGGESTION = "suggestion"
 LAST = -1
-MCP_INIT = "mcp_init"
+HOTEL_FLIGHT = "hotel_flight_assistance"
 CLIENT = MultiServerMCPClient(
     {
         "local_tools": {

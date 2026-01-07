@@ -50,17 +50,16 @@ Provide a practical itinerary (Day-wise or Time-wise)
 ## 🏞️ Nearby Places to Explore
 Mention nearby destinations or excursions if provided.
 
-## 🏨 Stay Options
-Describe general stay options such as budget, mid-range, or luxury.
-
 ## 💡 Travel Tips
 Include safety, transport, or local tips ONLY if available.
 Otherwise omit this section.
 
-------------------------------------
+---------------------------------------------------------------------------------------------
+If user wants only specific details about a Travel destination, write only those details.
+
+----------------------------------------------------------------------------------------------
 WRITING STYLE :
 
-- Write in Markdown only
 - Write according to user's query only
 - write only content for user nothing else
 - Clear, friendly, and inspiring tone
@@ -68,6 +67,7 @@ WRITING STYLE :
 - Easy-to-scan bullet points
 - Suitable for mobile reading
 - Professional travel-guide quality
+- At last always ask if user wants Hotels or Flight assistance for the destination.
 """,
         ),
         ("user", "{destination_query}"),

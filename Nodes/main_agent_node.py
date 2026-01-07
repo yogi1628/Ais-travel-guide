@@ -17,4 +17,6 @@ def main_agent_node(state: MessagesState) -> MessagesState:
             "need_destination_details": res.need_destination_details,
             "user_preferences": res.user_preferences,
             "destination_query": res.destination_query,
+            "need_hotel_flight_node": res.need_hotel_flight_node,
+            "hotels_flight_query": res.hotels_flight_query,
         }

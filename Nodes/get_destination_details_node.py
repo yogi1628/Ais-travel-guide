@@ -15,8 +15,5 @@ async def get_destination_details_node(state: MessagesState) -> MessagesState:
     return {
         "messages": res["messages"] if isinstance(res, dict) else [res],
         "need_suggestion": False,
-        "need_clarification": state["need_clarification"],
         "need_destination_details": False,
-        "destination_query": state["destination_query"],
-        "user_preferences": state["user_preferences"],
     }

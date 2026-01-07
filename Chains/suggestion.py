@@ -1,4 +1,3 @@
-from constants import LLM1, LLM2
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from datetime import datetime
 from langchain.agents import create_agent
@@ -13,9 +12,9 @@ suggestion_prompt = ChatPromptTemplate.from_messages(
 You are a sub agent at Ais Travel Guide,
 Today : {today}
 Task: 
-- You will be given user's preferences to travel somewhere in India only and Search_result,
+- You will be given user's preferences to travel somewhere in India
 - You are equipped with TavilySearch Tools.
-- if Search_result is 'empty', invoke the tool and get web search results for tourist sites in India related to user's preference.
+- Invoke the tool once or maximum twice and get web search results for tourist sites in India related to user's preference.
 - Rank the search results places that best suits user's preference and write clean descriptions for suggestion.
 - Suggest destinations only if seasonal weather suits the user’s travel time and activities (e.g., avoid Bir Billing paragliding in monsoon).
 - Reply in Markdown with 2-3 suggestions maximum, nothing else.
@@ -32,7 +31,6 @@ Example : (user's taste - mountain, hiking, camping)
     3. Tawang, Arunachal Pradesh
     Duration: 6 days | Altitude: ~2300 m | Best time: March – June
     Tawang is a high-altitude mountain town with dramatic landscapes and cool weather. It offers scenic hiking routes and remote camping experiences. The region is less commercial and perfect for quiet nature exploration. Ideal for travelers who prefer raw mountain beauty.
-
 """,
         ),
         ("user", "{user_taste}"),
