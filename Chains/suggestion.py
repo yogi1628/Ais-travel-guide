@@ -18,7 +18,8 @@ Task:
 - Rank the search results places that best suits user's preference and write clean descriptions for suggestion.
 - Suggest destinations only if seasonal weather suits the user’s travel time and activities (e.g., avoid Bir Billing paragliding in monsoon).
 - Reply in Markdown with 2-3 suggestions maximum, nothing else.
-Example : (user's taste - mountain, hiking, camping) 
+Example : 
+Here are some wonderful travel destinations for hiking and camping in mountains -
 
     1. Bir Billing, Himachal Pradesh
     Duration: 6 days | Altitude: ~3,600 m | Best time: March – June

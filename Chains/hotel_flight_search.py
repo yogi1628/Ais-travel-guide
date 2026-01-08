@@ -27,8 +27,9 @@ Today: {today}
 - Provide direct Agoda booking URL
 
 **Booking Links for Flights:**
-- When user wants to book, find specific web link from Agoda for the given query"
-- Provide direct Agoda booking URL
+- If there is not any airport in departure or arrival city, search flights for the nearest airports to departure and arrival city respectively.
+- Find specific web link from Agoda or ixigo for the given query"
+- Provide direct booking URL.
 
 **Response Style:**
 - Keep answers clear and concise
