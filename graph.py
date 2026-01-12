@@ -56,8 +56,8 @@ config = {"configurable": {"thread_id": "1"}}
 # app.get_graph().draw_mermaid_png(output_file_path="GRAPHS-PNGs/flow-4.png")
 
 
-# async def responder(user_input, history=[]):
-#     res = await app.ainvoke(
-#         {"messages": [HumanMessage(content=user_input)]}, config=config
-#     )
-#     return res["messages"][LAST].content
+async def responder(user_input, history=[]):
+    res = await app.ainvoke(
+        {"messages": [HumanMessage(content=user_input)]}, config=config
+    )
+    return {"message": res["messages"][LAST].content}
