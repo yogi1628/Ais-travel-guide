@@ -8,4 +8,11 @@ gradio
 langchain-tavily
 mcp
 langchain-mcp-adapters
-bcrypt
+fastapi
+uvicorn[standard]
+pymongo
+python-multipart
+passlib==1.7.4
+bcrypt==3.2.2
+python-jose
+

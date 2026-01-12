@@ -1,0 +1,9 @@
+from pymongo import MongoClient
+import os
+
+mongo_url = os.getenv("MONGODB_URL")
+
+client = MongoClient(mongo_url)
+db = client["Ais-travel-guide"]
+Destinations = db["destinations"]
+Users = db["users"]
