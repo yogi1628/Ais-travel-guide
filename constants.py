@@ -17,6 +17,7 @@ END = END
 SUGGESTION = "suggestion"
 LAST = -1
 HOTEL_FLIGHT = "hotel_flight_assistance"
+PROFILE_PHOTO_DIR = "app/images/profile-photos"
 CLIENT = MultiServerMCPClient(
     {
         "local_tools": {

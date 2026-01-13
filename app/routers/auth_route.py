@@ -4,9 +4,9 @@ import os
 from app.auth import hash_password, verify_password, create_token, get_current_user
 from app.mongo import Users
 from app.models import Signup_Schema
+from constants import PROFILE_PHOTO_DIR
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
-Profile_photo_dir = "app/images/profile-photos"
 
 
 @router.post("/signup")
@@ -22,7 +22,7 @@ async def signup(
 
     image_ext = profile_photo.filename.split(".")[-1]
     image_name = f"{username}.{image_ext}"
-    image_path = os.path.join(Profile_photo_dir, image_name)
+    image_path = os.path.join(PROFILE_PHOTO_DIR, image_name)
     user = Signup_Schema(
         name=name,
         email=email,
