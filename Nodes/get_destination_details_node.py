@@ -11,9 +11,15 @@ async def get_destination_details_node(state: MessagesState) -> MessagesState:
     destination_detail_agent = create_agent(model=LLM3, tools=tools)
     get_details_chain = destination_details_prompt | destination_detail_agent
 
-    res = await get_details_chain.ainvoke({"destination_query": destination_query})
+    all_messages = await get_details_chain.ainvoke(
+        {"destination_query": destination_query}
+    )
+    res = all_messages[LAST]
     return {
-        "messages": res["messages"] if isinstance(res, dict) else [res],
-        "need_suggestion": False,
+        **state,
+        "messages": [res],
+        "need_clarification": False,
         "need_destination_details": False,
+        "need_hotel_flight_node": False,
+        "need_suggestion": False,
     }

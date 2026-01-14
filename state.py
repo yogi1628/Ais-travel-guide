@@ -5,6 +5,7 @@ from langgraph.graph.message import add_messages
 
 class MessagesState(TypedDict):
     messages: Annotated[list[AnyMessage], add_messages]
+    user: str
     need_clarification: bool
     need_suggestion: bool
     tools: list

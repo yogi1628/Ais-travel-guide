@@ -11,7 +11,12 @@ async def suggestion_node(state: MessagesState) -> MessagesState:
     suggestion_chain = suggestion_prompt | suggestion_agent
     all_messages = await suggestion_chain.ainvoke({"user_taste": user_taste})
     res = all_messages["messages"][LAST]
+    print(state)
     return {
-        "messages": res["messages"] if isinstance(res, dict) else [res],
+        **state,
+        "messages": [res],
+        "need_clarification": False,
+        "need_destination_details": False,
+        "need_hotel_flight_node": False,
         "need_suggestion": False,
     }

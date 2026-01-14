@@ -2,14 +2,22 @@ from Chains.main_agent import main_agent_chain
 from langchain.messages import AIMessage
 from state import MessagesState
 from constants import LAST
+from app.mongo import Users
 
 
 def main_agent_node(state: MessagesState) -> MessagesState:
     if isinstance(state["messages"][LAST], AIMessage):
-        return
+        return state
     else:
-        res = main_agent_chain.invoke({"messages": state["messages"]})
-        print(state, res)
+        user = state["user"]
+        user_data = Users.find_one({"username": user})
+        name = user_data["name"]
+        user_history = "\n".join(user_data["user_history"])
+
+        res = main_agent_chain.invoke(
+            {"messages": state["messages"], "name": name, "user_history": user_history}
+        )
+        print(state)
         return {
             "messages": [AIMessage(res.messages)],
             "need_suggestion": res.need_suggestion,

@@ -29,6 +29,7 @@ async def signup(
         username=username,
         password=hash_password(password),
         profile_photo=image_name,
+        user_history=[],
     ).model_dump()
 
     with open(image_path, "wb") as f:

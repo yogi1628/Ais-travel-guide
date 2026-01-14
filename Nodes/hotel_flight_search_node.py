@@ -14,7 +14,12 @@ async def hotel_flight_node(state: MessagesState) -> MessagesState:
     hotel_search_chain = hotel_flight_search_prompt | hotel_search_agent
     all_messages = await hotel_search_chain.ainvoke({"user_query": user_query})
     res = all_messages["messages"][LAST]
+    state["need_hotel_flight_node"] = False
     return {
-        "messages": res["messages"] if isinstance(res, dict) else [res],
+        **state,
+        "messages": [res],
+        "need_clarification": False,
+        "need_destination_details": False,
         "need_hotel_flight_node": False,
+        "need_suggestion": False,
     }

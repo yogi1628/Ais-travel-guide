@@ -28,6 +28,7 @@ class Signup_Schema(BaseModel):
     username: str
     password: str
     profile_photo: Optional[str]
+    user_history: list[str] = []
 
 
 def output_item(object):
