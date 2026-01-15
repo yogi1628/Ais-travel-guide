@@ -51,7 +51,7 @@ graph.add_edge(SUMMARIZATION, END)
 app = graph.compile(checkpointer=memory)
 config = {"configurable": {"thread_id": "1"}}
 
-app.get_graph().draw_mermaid_png(output_file_path="GRAPHS-PNGs/flow-6.png")
+# app.get_graph().draw_mermaid_png(output_file_path="GRAPHS-PNGs/flow-6.png")
 
 
 async def responder(user_input, history=[]):

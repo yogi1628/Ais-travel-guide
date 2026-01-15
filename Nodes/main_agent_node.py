@@ -22,7 +22,6 @@ def main_agent_node(state: MessagesState) -> MessagesState:
                     "user_history": user_history,
                 }
             )
-            print(state)
             return {
                 "messages": [AIMessage(res.messages)],
                 "need_suggestion": res.need_suggestion,
@@ -35,4 +34,5 @@ def main_agent_node(state: MessagesState) -> MessagesState:
             }
     except Exception as e:
         print(f"Error occured as : {e}")
+        state["messages"][LAST].content += "\nBe strict to the output JSON schema"
         return {**state, "error_occured": True}
