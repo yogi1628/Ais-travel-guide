@@ -6,25 +6,33 @@ from app.mongo import Users
 
 
 def main_agent_node(state: MessagesState) -> MessagesState:
-    if isinstance(state["messages"][LAST], AIMessage):
-        return state
-    else:
-        user = state["user"]
-        user_data = Users.find_one({"username": user})
-        name = user_data["name"]
-        user_history = "\n".join(user_data["user_history"])
+    try:
+        if isinstance(state["messages"][LAST], AIMessage):
+            return state
+        else:
+            user = state["user"]
+            user_data = Users.find_one({"username": user})
+            name = user_data["name"]
+            user_history = "\n".join(user_data["user_history"])
 
-        res = main_agent_chain.invoke(
-            {"messages": state["messages"], "name": name, "user_history": user_history}
-        )
-        print(state)
-        return {
-            "messages": [AIMessage(res.messages)],
-            "need_suggestion": res.need_suggestion,
-            "need_clarification": res.need_clarification,
-            "need_destination_details": res.need_destination_details,
-            "user_preferences": res.user_preferences,
-            "destination_query": res.destination_query,
-            "need_hotel_flight_node": res.need_hotel_flight_node,
-            "hotels_flight_query": res.hotels_flight_query,
-        }
+            res = main_agent_chain.invoke(
+                {
+                    "messages": state["messages"],
+                    "name": name,
+                    "user_history": user_history,
+                }
+            )
+            print(state)
+            return {
+                "messages": [AIMessage(res.messages)],
+                "need_suggestion": res.need_suggestion,
+                "need_clarification": res.need_clarification,
+                "need_destination_details": res.need_destination_details,
+                "user_preferences": res.user_preferences,
+                "destination_query": res.destination_query,
+                "need_hotel_flight_node": res.need_hotel_flight_node,
+                "hotels_flight_query": res.hotels_flight_query,
+            }
+    except Exception as e:
+        print(f"Error occured as : {e}")
+        return {**state, "error_occured": True}

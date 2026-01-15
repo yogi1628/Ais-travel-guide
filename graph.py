@@ -40,6 +40,7 @@ graph.add_conditional_edges(
         GET_DESTINATION_DETAILS: GET_DESTINATION_DETAILS,
         HOTEL_FLIGHT: HOTEL_FLIGHT,
         SUMMARIZATION: SUMMARIZATION,
+        MAIN_AGENT: MAIN_AGENT,
     },
 )
 graph.add_edge(SUGGESTION, MAIN_AGENT)
@@ -50,7 +51,7 @@ graph.add_edge(SUMMARIZATION, END)
 app = graph.compile(checkpointer=memory)
 config = {"configurable": {"thread_id": "1"}}
 
-# app.get_graph().draw_mermaid_png(output_file_path="GRAPHS-PNGs/flow-6.png")
+app.get_graph().draw_mermaid_png(output_file_path="GRAPHS-PNGs/flow-6.png")
 
 
 async def responder(user_input, history=[]):
