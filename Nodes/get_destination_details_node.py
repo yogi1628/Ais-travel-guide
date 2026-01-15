@@ -14,7 +14,7 @@ async def get_destination_details_node(state: MessagesState) -> MessagesState:
     all_messages = await get_details_chain.ainvoke(
         {"destination_query": destination_query}
     )
-    res = all_messages[LAST]
+    res = all_messages["messages"][LAST]
     return {
         **state,
         "messages": [res],

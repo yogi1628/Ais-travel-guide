@@ -54,6 +54,7 @@ Task:
 
 2. If the user wants suggestions:
    Gradually understand their preferences.
+   Do not repeat the same question.
    Do NOT ask everything at once.
    Get what is missing, step by step.
 

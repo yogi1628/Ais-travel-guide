@@ -5,7 +5,6 @@ from langchain_tavily import TavilySearch
 import json
 import os
 import requests
-from amadeus_cl import hotel_search
 
 load_dotenv()
 
@@ -102,102 +101,90 @@ def weather_info(city: str) -> dict:
 
 
 @mcp.tool()
-def get_hotels_by_geo_code(
-    lat: float, lon: float, ratings: list[str] = ["3", "4", "5"]
-) -> list:
+def search_hotel(city: str, stars: int = None):
     """
-    Search hotels near a geographic location using latitude and longitude.
-
-    Use this tool when the user provides coordinates instead of a city name.
-
+    Search hotels by city and optional star rating.
     Args:
-        lat (float): Latitude of the location.
-        lon (float): Longitude of the location.
-        ratings (list[str], optional): Hotel star ratings to filter by.
-
-    Returns:
-        list: List of hotels near the given coordinates,
-        or a fallback message if no hotels are found.
+        city (str): City name.
+        stars (int, optional): Hotel star rating.
     """
-    hotels = hotel_search.search_hotels_by_geocode(
-        latitude=lat, longitude=lon, radius=5, ratings=ratings
+    url = (
+        f"http://localhost:3000/hotels/{city}?stars={stars}"
+        if stars
+        else f"http://localhost:3000/hotels/{city}"
     )
-    return (
-        ["Hotels not found from this tool, Try Tavilly Search tool."]
-        if hotels == []
-        else hotels
-    )
+    res = requests.get(url=url)
+    return res.json()
 
 
 @mcp.tool()
-def get_hotel_by_city_code(
-    city_code: str,
-    ratings: list[str] = ["3", "4", "5"],
-    amenities: list[str] = ["WIFI"],
-) -> list:
+def book_hotel(
+    offer_id: str,
+    check_in: str,
+    check_out: str,
+    name: str,
+    rooms_requirement: int,
+    adults: int,
+):
     """
-    Search hotels within a city using IATA city code.
-
-    Use this tool when the user specifies a destination city.
-
+    Book a hotel.
     Args:
-        city_code (str): City code identifier.
-        ratings (list[str], optional): Hotel star ratings to filter by.
-        amenities (list[str], optional): Required hotel amenities.
-
-    Returns:
-        list: List of hotels in the city,
-        or a fallback message if no hotels are found.
+        offer_id (str): Hotel offer ID.
+        check_in (str): Check-in date (YYYY-MM-DD).
+        check_out (str): Check-out date (YYYY-MM-DD).
+        name (str): Name of person, booking the hotel.
+        rooms_requirement (int): Number of rooms.
+        adults (int): Number of adults.
     """
-    hotels = hotel_search.search_hotels_by_city(
-        city_code=city_code, radius=20, ratings=ratings, amenities=amenities
-    )
-    return (
-        ["Hotels not found from this tool, Try Tavilly Search tool."]
-        if hotels == []
-        else hotels
-    )
+    payload = {
+        "offer_id": offer_id,
+        "check_in": check_in,
+        "check_out": check_out,
+        "name": name,
+        "rooms_requirement": rooms_requirement,
+        "adults": adults,
+    }
+    url = "http://localhost:3000/hotels/book"
+    res = requests.post(url=url, data=payload)
+    return res.json()
 
 
-# @mcp.tool()
-# def hotel_offers(
-#     hotel_ids: str,
-#     check_in_date: str,
-#     check_out_date: str,
-#     adults: int,
-#     room_quantity: int,
-#     currency: str,
-#     board_type: str = "BREAKFAST",
-# ) -> list:
-#     """
-#     Fetch available hotel offers for given hotels and stay details.
+@mcp.tool()
+def search_flight(departure_city: str, arrival_city: str, departure_date: str):
+    """
+    Search flights for a given route and date.
+    Args:
+        departure_city (str): IATA Departure city code.
+        arrival_city (str): IATA Arrival city code.
+        departure_date (str): Departure date (YYYY-MM-DD).
+    """
+    payload = {
+        "departure_city": departure_city,
+        "arrival_city": arrival_city,
+        "departure_date": departure_date,
+    }
+    url = "http://localhost:3000/flights/search"
+    res = requests.post(url=url, data=payload)
+    return res.json()
 
-#     Dates must be in YYYY-MM-DD format.
 
-#     Args:
-#         hotel_ids (str): list of Comma-separated hotel ID, e.g. : hotel_ids = ["RDSLV925","OBSLVCEC","QISLV055","OBSLVWFH"] .
-#         check_in_date (str): Check-in date (YYYY-MM-DD).
-#         check_out_date (str): Check-out date (YYYY-MM-DD).
-#         adults (int): Number of adults.
-#         room_quantity (int): Number of rooms.
-#         currency (str): Currency code (e.g., INR, USD).
-#         board_type (str, optional): Meal plan type.
-
-#     Returns:
-#         list: Available hotel offers matching the criteria.
-#     """
-#     offers = hotel_search.search_hotel_offers(
-#         hotel_ids=hotel_ids,
-#         check_in_date=check_in_date,
-#         check_out_date=check_out_date,
-#         adults=adults,
-#         room_quantity=room_quantity,
-#         currency=currency,
-#         board_type=board_type,
-#     )
-#     if not offers:
-#         return json.dumps({"success": False, "message": "No offers"})
-#     return json.dumps({"success": True, "offers": offers})
+@mcp.tool()
+def book_flight(offer_id: str, names: list[str], flight_class: str):
+    """
+    Book a flight.
+    Args:
+        offer_id (str): Flight offer ID.
+        names (list[str]): Passenger names.
+        flight_class (str): Travel class, only from - economy, premium_economy, business, first.
+    """
+    payload = {
+        "offer_id": offer_id,
+        "names": names,
+        "flight_class": flight_class,
+    }
+    url = "http://localhost:3000/flights/book"
+    res = requests.post(url=url, data=payload)
+    return res.json()
 
 
 if __name__ == "__main__":

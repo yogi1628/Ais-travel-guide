@@ -9,10 +9,13 @@ import asyncio
 
 async def hotel_flight_node(state: MessagesState) -> MessagesState:
     user_query = state["hotels_flight_query"]
+    user = state["user"]
     tools = await CLIENT.get_tools()
     hotel_search_agent = create_agent(model=LLM4, tools=tools)
     hotel_search_chain = hotel_flight_search_prompt | hotel_search_agent
-    all_messages = await hotel_search_chain.ainvoke({"user_query": user_query})
+    all_messages = await hotel_search_chain.ainvoke(
+        {"user_query": user_query, "user": user}
+    )
     res = all_messages["messages"][LAST]
     state["need_hotel_flight_node"] = False
     return {
