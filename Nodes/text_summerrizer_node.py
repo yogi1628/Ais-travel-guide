@@ -7,6 +7,7 @@ from constants import LAST
 
 async def summerizer(state: MessagesState) -> MessagesState:
     if len(state["messages"]) < 10:
+        print(state)
         return {**state}
     else:
         user = state["user"]

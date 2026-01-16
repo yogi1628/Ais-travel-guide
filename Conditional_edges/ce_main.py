@@ -18,7 +18,7 @@ def diverter_main(state: MessagesState) -> str:
         return GET_DESTINATION_DETAILS
     elif state.get("need_hotel_flight_node", False):
         return HOTEL_FLIGHT
-    elif state.get("error_occured", False):
+    elif state.get("schema_error_occured", False):
         return MAIN_AGENT
     else:
         return SUMMARIZATION

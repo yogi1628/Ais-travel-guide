@@ -1,14 +1,16 @@
+import json
 from Chains.main_agent import main_agent_chain
-from langchain.messages import AIMessage
+from langchain.messages import AIMessage, SystemMessage
 from state import MessagesState
 from constants import LAST
 from app.mongo import Users
+from utilities.error_handlers import is_json_schema_error
 
 
 def main_agent_node(state: MessagesState) -> MessagesState:
     try:
         if isinstance(state["messages"][LAST], AIMessage):
-            return state
+            return {**state}
         else:
             user = state["user"]
             user_data = Users.find_one({"username": user})
@@ -34,5 +36,10 @@ def main_agent_node(state: MessagesState) -> MessagesState:
             }
     except Exception as e:
         print(f"Error occured as : {e}")
-        state["messages"][LAST].content += "\nBe strict to the output JSON schema"
-        return {**state, "error_occured": True}
+
+        if is_json_schema_error(e):
+            plain_msg = str(e)[224:-3]
+            return {**state, "messages": [AIMessage(plain_msg)]}
+
+        else:
+            raise
