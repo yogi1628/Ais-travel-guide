@@ -36,10 +36,8 @@ def main_agent_node(state: MessagesState) -> MessagesState:
             }
     except Exception as e:
         print(f"Error occured as : {e}")
-
         if is_json_schema_error(e):
             plain_msg = str(e)[224:-3]
             return {**state, "messages": [AIMessage(plain_msg)]}
-
         else:
             raise

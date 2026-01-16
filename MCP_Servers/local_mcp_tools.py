@@ -59,47 +59,6 @@ def weather_info(city: str) -> dict:
     return data if data["cod"] == 200 else "Sorry, City not found"
 
 
-# @mcp.tool()
-# def get_wikivoyage_page(destination: str):
-#     """
-#     Fetch a plain-text travel guide summary for a destination from Wikivoyage.
-
-#     Args:
-#         destination (str): Destination name (e.g., "Paris", "Kerala").
-
-#     Returns:
-#         str: Wikivoyage page extract if available, otherwise an invalid
-#              destination message.
-
-#     Raises:
-#         requests.exceptions.HTTPError: If the HTTP request fails.
-#         ValueError: If a non-JSON response is received.
-#     """
-#     HEADERS = {"User-Agent": "AisTravelGuide/1.0 (contact: your_email@example.com)"}
-#     url = "https://en.wikivoyage.org/w/api.php"
-
-#     params = {
-#         "action": "query",
-#         "format": "json",
-#         "titles": destination,
-#         "prop": "extracts",
-#         "explaintext": True,
-#         "redirects": 1,
-#     }
-#     response = requests.get(url, params=params, headers=HEADERS, timeout=10)
-#     response.raise_for_status()
-#     if not response.headers.get("Content-Type", "").startswith("application/json"):
-#         raise ValueError("Non-JSON response received")
-#     data = response.json()
-#     pages = data["query"]["pages"]
-#     page = next(iter(pages.values()))
-#     return (
-#         page.get("extract")
-#         if page.get("extract") != None
-#         else f"Invalid name : {destination}, Try with a valid name"
-#     )
-
-
 @mcp.tool()
 def search_hotel(city: str, stars: int = None):
     """

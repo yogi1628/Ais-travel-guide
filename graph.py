@@ -40,7 +40,6 @@ graph.add_conditional_edges(
         GET_DESTINATION_DETAILS: GET_DESTINATION_DETAILS,
         HOTEL_FLIGHT: HOTEL_FLIGHT,
         SUMMARIZATION: SUMMARIZATION,
-        MAIN_AGENT: MAIN_AGENT,
     },
 )
 graph.add_edge(SUGGESTION, MAIN_AGENT)
@@ -51,20 +50,31 @@ graph.add_edge(SUMMARIZATION, END)
 app = graph.compile(checkpointer=memory)
 config = {"configurable": {"thread_id": "1"}}
 
-# app.get_graph().draw_mermaid_png(output_file_path="GRAPHS-PNGs/flow-6.png")
+# app.get_graph().draw_mermaid_png(output_file_path="GRAPHS-PNGs/flow-5.png")
 
 
+# For Gradio(Test Version)
 async def responder(user_input, history=[]):
-    user = "ais"
-    res = await app.ainvoke(
-        {"messages": [HumanMessage(content=user_input)], "user": user},
-        config=config,
-    )
-    return res["messages"][LAST].content
+    try:
+        user = "ais"
+        res = await app.ainvoke(
+            {"messages": [HumanMessage(content=user_input)], "user": user},
+            config=config,
+        )
+        return res["messages"][LAST].content
+    except Exception as e:
+        print(f"Error Occured as : {e}")
+        return "Something went wrong, Please try again later!"
 
 
+# For API Version
 # async def responder(user_input: str, user: str):
-#     res = await app.ainvoke(
-#         {"messages": [HumanMessage(content=user_input)], "user": user}, config=config
-#     )
-#     return {"message": res["messages"][LAST].content}
+#     try:
+#         res = await app.ainvoke(
+#             {"messages": [HumanMessage(content=user_input)], "user": user},
+#             config=config,
+#         )
+#         return {"message": res["messages"][LAST].content}
+#     except Exception as e:
+#         print(f"Error Occured as : {e}")
+#         return "Something went wrong, Please try again later!"

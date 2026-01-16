@@ -14,4 +14,3 @@ class MessagesState(TypedDict):
     destination_query: str
     need_hotel_flight_node: bool
     hotels_flight_query: str
-    schema_error_occured: bool

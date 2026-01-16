@@ -1,6 +1,4 @@
 langchain-groq
-langchain-google-genai
-langchain-ollama
 langchain
 langgraph
 python-dotenv
