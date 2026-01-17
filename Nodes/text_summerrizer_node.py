@@ -6,7 +6,7 @@ from constants import LAST
 
 
 async def summerizer(state: MessagesState) -> MessagesState:
-    if len(state["messages"]) < 10:
+    if len(state["messages"]) < 14:
         return {**state}
     else:
         user = state["user"]
@@ -23,6 +23,6 @@ async def summerizer(state: MessagesState) -> MessagesState:
             {"username": user},
             {"$push": {"user_history": summary}},
         )
-        last_msg = state["messages"][LAST]
+        last_msg = state["messages"][-4:]
         state["messages"].clear()
-        return {**state, "messages": [last_msg]}
+        return {**state, "messages": last_msg}

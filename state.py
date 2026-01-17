@@ -8,7 +8,6 @@ class MessagesState(TypedDict):
     user: str
     need_clarification: bool
     need_suggestion: bool
-    tools: list
     need_destination_details: bool
     user_preferences: str
     destination_query: str

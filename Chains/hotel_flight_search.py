@@ -28,6 +28,7 @@ User's name: {user}
 ## Response Style
 - Keep responses short and clear
 - Use bullet points for hotel or flight lists
+- Always provide offer_id with hotels and flights list.
 - After showing results, always ask if the user wants to proceed with booking
 - After booking, respond only with a brief confirmation and the payment URL
 """,

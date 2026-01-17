@@ -70,6 +70,7 @@ Task:
    - If user confirms they want booking assistance:
           - Set `need_hotel_flight_node = True`
           - Set `hotels_flight_query = "<your summary sentence>"`
+          - Always provide offer_id of hotels and flights, along with other details in `hotels_flight_query'
           - Set all other flags to `False`
 
 Important:
