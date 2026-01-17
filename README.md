@@ -237,14 +237,10 @@ Once the server is running, visit:
 
 ### AI Chat (`/chat`)
 
-- `POST /chat/chat` - Send a message to the AI travel assistant
+- `POST /chat/` - Send a message to the AI travel assistant
   - Headers: `Authorization: Bearer <token>`
   - Body: `user_input` (string)
   - Returns: AI response message
-
-### Destinations (`/destinations`)
-
-- `GET /destinations/` - Get all available destinations
 
 ---
 
@@ -259,8 +255,7 @@ Travel-guide/
 │   ├── mongo.py                  # MongoDB connection
 │   ├── routers/                  # API route handlers
 │   │   ├── ai_chat_route.py      # AI chat endpoints
-│   │   ├── auth_route.py         # Authentication endpoints
-│   │   └── destinations_route.py # Destination endpoints
+│   │   ├── auth_route.py         # Authentication endpoints      
 │   └── images/                   # User profile photos
 │
 ├── Chains/                       # LangChain prompt chains
