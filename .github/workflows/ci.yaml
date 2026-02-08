@@ -35,3 +35,6 @@ jobs:
 
       - name: Bandit security scan
         run: bandit -r .
+
+      - name: Built API image
+        run: docker build -t ais-travel-guide-API ./
