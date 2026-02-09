@@ -1,8 +1,8 @@
-name: Python CI
+name: Python CI/CD
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
     branches: [ main, develop ]
 
@@ -36,5 +36,36 @@ jobs:
       - name: Bandit security scan
         run: bandit -r .
 
-      - name: Built API image
-        run: docker build -t ais-travel-guide-API ./
+      - name: Build API image
+        run: docker build -t ais-travel-guide-api .
+
+  deploy:
+    needs: quality-checks
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            echo "🚀 Starting deployment..."
+
+            cd ${{ secrets.APP_DIR }}
+
+            echo "📥 Pulling latest code"
+            git pull origin main
+
+            echo "🛑 Stopping old containers"
+            docker compose down
+
+            echo "🔨 Rebuilding containers"
+            docker compose build
+
+            echo "▶️ Starting containers"
+            docker compose up -d
+
+            echo "✅ Deployment completed"
